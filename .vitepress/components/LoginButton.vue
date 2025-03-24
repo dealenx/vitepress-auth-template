@@ -15,10 +15,17 @@
 <script setup lang="ts">
 import { useAuthService } from '../auth/authService';
 
-const { isAuthenticated, loading, login } = useAuthService();
+const { isAuthenticated, loading, login, currentProvider } = useAuthService();
 
 const handleLogin = () => {
-  login();
+  // Если используется Auth0, то просто вызываем login
+  if (currentProvider.value === 'auth0') {
+    login();
+  } else {
+    // Если используется Basic Auth, перенаправляем на защищенную страницу,
+    // где появится форма Basic Auth в AuthGuard
+    window.location.href = '/markdown-examples';
+  }
 };
 </script>
 
