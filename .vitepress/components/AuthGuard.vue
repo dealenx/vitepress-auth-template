@@ -10,7 +10,7 @@
 
       <!-- Auth0 Login -->
       <div v-if="currentProvider === 'auth0'">
-        <button class="login-button" @click="handleAuth0Login">Log In with Auth0</button>
+        <button class="login-button" @click="handleAuth0Login">Log In</button>
       </div>
 
       <!-- Basic Auth Login Form -->
