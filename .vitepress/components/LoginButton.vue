@@ -19,12 +19,12 @@ import { withBase } from 'vitepress';
 const { isAuthenticated, loading, login, currentProvider } = useAuthService();
 
 const handleLogin = () => {
-  // Если используется Auth0, то просто вызываем login
+  // If using Auth0, simply call login
   if (currentProvider.value === 'auth0') {
     login();
   } else {
-    // Для Supabase и Basic Auth перенаправляем на страницу логина,
-    // где отобразится соответствующая форма
+    // For Supabase and Basic Auth, redirect to the login page
+    // where the appropriate form will be displayed
     window.location.href = withBase('/login');
   }
 };
