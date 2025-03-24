@@ -2,10 +2,10 @@ import { readonly, ref, computed, Ref } from "vue";
 import * as auth0Service from "./auth0Service";
 import * as basicAuthService from "./basicAuthService";
 
-// Типы для авторизации
+// Authentication types
 export type AuthProvider = "auth0" | "basic";
 
-// Общий интерфейс для провайдеров аутентификации
+// Common interface for authentication providers
 export interface AuthState {
   isAuthenticated: Ref<boolean>;
   user: Ref<any>;
@@ -13,7 +13,7 @@ export interface AuthState {
   error: Ref<any>;
 }
 
-// Интерфейс для адаптера аутентификации
+// Interface for authentication adapter
 interface AuthAdapter {
   useAuth: () => AuthState;
   initAuth: () => Promise<void>;
@@ -21,7 +21,7 @@ interface AuthAdapter {
   logout: () => Promise<void>;
 }
 
-// Адаптер для auth0Service
+// Adapter for auth0Service
 const auth0Adapter: AuthAdapter = {
   useAuth: () => {
     const auth = auth0Service.useAuth();
@@ -35,12 +35,12 @@ const auth0Adapter: AuthAdapter = {
   initAuth: auth0Service.initAuth,
   login: async (options?: any) => {
     await auth0Service.login(options);
-    return true; // auth0 не возвращает результат, всегда считаем успешным
+    return true; // auth0 doesn't return a result, always consider it successful
   },
   logout: auth0Service.logout,
 };
 
-// Адаптер для basicAuthService
+// Adapter for basicAuthService
 const basicAuthAdapter: AuthAdapter = {
   useAuth: () => {
     const auth = basicAuthService.useBasicAuth();
@@ -61,54 +61,54 @@ const basicAuthAdapter: AuthAdapter = {
   logout: basicAuthService.logout,
 };
 
-// Реестр адаптеров
+// Registry of adapters
 const adapters: Record<AuthProvider, AuthAdapter> = {
   auth0: auth0Adapter,
   basic: basicAuthAdapter,
 };
 
-// Получаем провайдер из переменных окружения
+// Get provider from environment variables
 const defaultProvider =
   (import.meta.env.DEFAULT_AUTH_PROVIDER as AuthProvider) || "auth0";
 
-// Текущий провайдер аутентификации
+// Current authentication provider
 const currentProvider = ref<AuthProvider>(defaultProvider);
 
-// Метаданные аутентификации
+// Authentication metadata
 const lastLoginAttempt = ref<Date | null>(null);
 
-// Получаем текущий адаптер
+// Get current adapter
 function getCurrentAdapter(): AuthAdapter {
   return adapters[currentProvider.value];
 }
 
-// Экспортируем функцию смены провайдера
+// Export function to change provider
 export function setAuthProvider(provider: AuthProvider) {
   if (provider !== currentProvider.value) {
     currentProvider.value = provider;
   }
 }
 
-// Инициализация сервиса
+// Service initialization
 export async function initAuth() {
   await getCurrentAdapter().initAuth();
 }
 
-// Метод входа
+// Login method
 export async function login(options?: any) {
   lastLoginAttempt.value = new Date();
   return await getCurrentAdapter().login(options);
 }
 
-// Метод выхода
+// Logout method
 export async function logout() {
   lastLoginAttempt.value = null;
   await getCurrentAdapter().logout();
 }
 
-// Пользовательский хук для компонентов Vue
+// Custom hook for Vue components
 export const useAuthService = () => {
-  // Создаем вычисляемые свойства на основе текущего адаптера
+  // Create computed properties based on current adapter
   const isAuthenticated = computed(
     () => getCurrentAdapter().useAuth().isAuthenticated.value
   );
