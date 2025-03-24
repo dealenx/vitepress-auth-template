@@ -14,6 +14,7 @@
 
 <script setup lang="ts">
 import { useAuthService } from '../auth/authService';
+import { withBase } from 'vitepress';
 
 const { isAuthenticated, loading, login, currentProvider } = useAuthService();
 
@@ -24,7 +25,7 @@ const handleLogin = () => {
   } else {
     // Если используется Basic Auth, перенаправляем на защищенную страницу,
     // где появится форма Basic Auth в AuthGuard
-    window.location.href = '/markdown-examples';
+    window.location.href = withBase('/login');
   }
 };
 </script>
