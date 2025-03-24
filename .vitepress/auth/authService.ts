@@ -1,9 +1,10 @@
 import { readonly, ref, computed, Ref } from "vue";
 import * as auth0Service from "./auth0Service";
 import * as basicAuthService from "./basicAuthService";
+import * as supabaseService from "./supabaseService";
 
 // Authentication types
-export type AuthProvider = "auth0" | "basic";
+export type AuthProvider = "auth0" | "basic" | "supabase";
 
 // Common interface for authentication providers
 export interface AuthState {
@@ -61,10 +62,29 @@ const basicAuthAdapter: AuthAdapter = {
   logout: basicAuthService.logout,
 };
 
+// Adapter for supabaseService
+const supabaseAdapter: AuthAdapter = {
+  useAuth: () => {
+    const auth = supabaseService.useSupabaseAuth();
+    return {
+      isAuthenticated: auth.isAuthenticated,
+      user: auth.user,
+      loading: auth.loading,
+      error: auth.error,
+    };
+  },
+  initAuth: supabaseService.initAuth,
+  login: async (options?: any) => {
+    return await supabaseService.login(options);
+  },
+  logout: supabaseService.logout,
+};
+
 // Registry of adapters
 const adapters: Record<AuthProvider, AuthAdapter> = {
   auth0: auth0Adapter,
   basic: basicAuthAdapter,
+  supabase: supabaseAdapter,
 };
 
 // Get provider from environment variables

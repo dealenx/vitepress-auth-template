@@ -22,6 +22,22 @@
                 </button>
             </div>
 
+            <!-- Supabase Login Form -->
+            <div v-else-if="currentProvider === 'supabase'" class="login-form">
+                <form @submit.prevent="handleSupabaseLogin">
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" v-model="email" placeholder="Enter email" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="supabasePassword">Password</label>
+                        <input type="password" id="supabasePassword" v-model="supabasePassword"
+                            placeholder="Enter password" required />
+                    </div>
+                    <button type="submit" class="login-button">Sign In</button>
+                </form>
+            </div>
+
             <!-- Basic Auth Login Form -->
             <div v-else class="login-form">
                 <form @submit.prevent="handleBasicLogin">
@@ -35,7 +51,6 @@
                     </div>
                     <button type="submit" class="login-button">Sign In</button>
                 </form>
-
             </div>
 
             <div class="home-link">
@@ -61,6 +76,9 @@ const {
 // Basic Auth form state
 const username = ref('');
 const password = ref('');
+// Supabase form state
+const email = ref('');
+const supabasePassword = ref('');
 const loginError = ref<string | null>(null);
 
 const handleAuth0Login = () => {
@@ -81,6 +99,27 @@ const handleBasicLogin = async () => {
             window.location.href = withBase('/');
         } else {
             loginError.value = 'Invalid username or password';
+        }
+    } catch (error) {
+        loginError.value = 'An error occurred during login';
+        console.error('Login error:', error);
+    }
+};
+
+const handleSupabaseLogin = async () => {
+    loginError.value = null;
+
+    try {
+        const success = await login({
+            email: email.value,
+            password: supabasePassword.value
+        });
+
+        if (success) {
+            // Redirect to home page after successful login
+            window.location.href = withBase('/');
+        } else {
+            loginError.value = 'Invalid email or password';
         }
     } catch (error) {
         loginError.value = 'An error occurred during login';

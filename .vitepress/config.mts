@@ -59,6 +59,10 @@ export default defineConfig({
       "import.meta.env.BASIC_AUTH_PASSWORD": JSON.stringify(
         env.BASIC_AUTH_PASSWORD || "password"
       ),
+      "import.meta.env.SUPABASE_URL": JSON.stringify(env.SUPABASE_URL || ""),
+      "import.meta.env.SUPABASE_ANON_KEY": JSON.stringify(
+        env.SUPABASE_ANON_KEY || ""
+      ),
     },
     optimizeDeps: {
       include: ["vue", "@auth0/auth0-spa-js"],

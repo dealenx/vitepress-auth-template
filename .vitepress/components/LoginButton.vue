@@ -23,8 +23,8 @@ const handleLogin = () => {
   if (currentProvider.value === 'auth0') {
     login();
   } else {
-    // Если используется Basic Auth, перенаправляем на защищенную страницу,
-    // где появится форма Basic Auth в AuthGuard
+    // Для Supabase и Basic Auth перенаправляем на страницу логина,
+    // где отобразится соответствующая форма
     window.location.href = withBase('/login');
   }
 };

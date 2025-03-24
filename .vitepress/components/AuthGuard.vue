@@ -13,6 +13,25 @@
         <button class="login-button" @click="handleAuth0Login">Log In</button>
       </div>
 
+      <!-- Supabase Login Form -->
+      <div v-else-if="currentProvider === 'supabase'" class="supabase-auth-form">
+        <div v-if="loginError" class="auth-error">
+          {{ loginError }}
+        </div>
+        <form @submit.prevent="handleSupabaseLogin">
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" v-model="email" placeholder="Enter email" required />
+          </div>
+          <div class="form-group">
+            <label for="supabasePassword">Password</label>
+            <input type="password" id="supabasePassword" v-model="supabasePassword" placeholder="Enter password"
+              required />
+          </div>
+          <button type="submit" class="login-button">Log In</button>
+        </form>
+      </div>
+
       <!-- Basic Auth Login Form -->
       <div v-else class="basic-auth-form">
         <div v-if="loginError" class="auth-error">
@@ -56,6 +75,9 @@ const {
 // Basic Auth form state
 const username = ref('');
 const password = ref('');
+// Supabase form state
+const email = ref('');
+const supabasePassword = ref('');
 const loginError = ref<string | null>(null);
 
 const requiresAuth = computed(() => {
@@ -76,6 +98,19 @@ const handleBasicLogin = async () => {
 
   if (!success) {
     loginError.value = 'Invalid username or password';
+  }
+};
+
+const handleSupabaseLogin = async () => {
+  loginError.value = null;
+
+  const success = await login({
+    email: email.value,
+    password: supabasePassword.value
+  });
+
+  if (!success) {
+    loginError.value = 'Invalid email or password';
   }
 };
 
@@ -189,5 +224,11 @@ onMounted(async () => {
   margin-top: 1rem;
   text-align: center;
   color: var(--vp-c-text-2);
+}
+
+/* Supabase Auth Form Styles */
+.supabase-auth-form {
+  margin-top: 1rem;
+  text-align: left;
 }
 </style>
