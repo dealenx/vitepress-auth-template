@@ -5,13 +5,13 @@ import { createClient, Session, AuthChangeEvent } from "@supabase/supabase-js";
 const supabaseUrl = import.meta.env.SUPABASE_URL || "";
 const supabaseAnonKey = import.meta.env.SUPABASE_ANON_KEY || "";
 
-// Проверяем наличие необходимых переменных окружения
+// Check for required environment variables
 if (!supabaseUrl) {
-  console.error("SUPABASE_URL не установлен в переменных окружения.");
+  console.error("SUPABASE_URL is not set in environment variables.");
 }
 
 if (!supabaseAnonKey) {
-  console.error("SUPABASE_ANON_KEY не установлен в переменных окружения.");
+  console.error("SUPABASE_ANON_KEY is not set in environment variables.");
 }
 
 // Initialize Supabase client only if we have URL and key
@@ -31,10 +31,10 @@ export async function initAuth() {
   loading.value = true;
 
   try {
-    // Проверяем, инициализирован ли клиент Supabase
+    // Check if Supabase client is initialized
     if (!supabase) {
       throw new Error(
-        "Клиент Supabase не был инициализирован. Проверьте переменные окружения SUPABASE_URL и SUPABASE_ANON_KEY."
+        "Supabase client was not initialized. Check the SUPABASE_URL and SUPABASE_ANON_KEY environment variables."
       );
     }
 
@@ -76,10 +76,10 @@ export async function login(options?: any): Promise<boolean> {
   error.value = null;
 
   try {
-    // Проверяем, инициализирован ли клиент Supabase
+    // Check if Supabase client is initialized
     if (!supabase) {
       throw new Error(
-        "Клиент Supabase не был инициализирован. Проверьте переменные окружения SUPABASE_URL и SUPABASE_ANON_KEY."
+        "Supabase client was not initialized. Check the SUPABASE_URL and SUPABASE_ANON_KEY environment variables."
       );
     }
 
@@ -119,10 +119,10 @@ export async function login(options?: any): Promise<boolean> {
 // Logout
 export async function logout() {
   try {
-    // Проверяем, инициализирован ли клиент Supabase
+    // Check if Supabase client is initialized
     if (!supabase) {
       throw new Error(
-        "Клиент Supabase не был инициализирован. Проверьте переменные окружения SUPABASE_URL и SUPABASE_ANON_KEY."
+        "Supabase client was not initialized. Check the SUPABASE_URL and SUPABASE_ANON_KEY environment variables."
       );
     }
 
