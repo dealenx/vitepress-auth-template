@@ -1,12 +1,9 @@
 <template>
-  <button 
-    v-if="!isAuthenticated && !loading" 
-    class="login-btn" 
-    @click="handleLogin"
-    title="Log in to access protected content"
-  >
+  <button v-if="!isAuthenticated && !loading" class="login-btn" @click="handleLogin"
+    title="Log in to access protected content">
     <span class="login-icon">
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
         <polyline points="10 17 15 12 10 7"></polyline>
         <line x1="15" y1="12" x2="3" y2="12"></line>
@@ -16,9 +13,9 @@
 </template>
 
 <script setup lang="ts">
-import { useAuth } from '../auth/auth0Service';
+import { useAuthService } from '../auth/authService';
 
-const { isAuthenticated, loading, login } = useAuth();
+const { isAuthenticated, loading, login } = useAuthService();
 
 const handleLogin = () => {
   login();

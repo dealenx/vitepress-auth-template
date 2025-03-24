@@ -14,12 +14,12 @@
 </template>
 
 <script setup lang="ts">
-import { useAuth } from '../auth/auth0Service';
+import { useAuthService } from '../auth/authService';
 import { useData } from 'vitepress';
 import { onMounted, computed } from 'vue';
 
 const { frontmatter } = useData();
-const { initAuth, login, isAuthenticated, loading } = useAuth();
+const { initAuth, login, isAuthenticated, loading } = useAuthService();
 
 const requiresAuth = computed(() => {
   return frontmatter.value.protected === true;
@@ -59,8 +59,13 @@ onMounted(async () => {
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .auth-login {
